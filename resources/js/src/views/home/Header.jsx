@@ -244,7 +244,7 @@ export default function Header() {
                             spacing={2}
                         >
                             <Button
-                                variant="contained"
+                                variant="contained" color="secondary"
                                 onClick={() => navigate("/login")}
                             >
                                 Login

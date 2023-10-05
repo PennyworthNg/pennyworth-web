@@ -7,14 +7,14 @@ export default function Sections() {
                 backgroundImage: "url('assets/bg/section.png')",
                 height: { md: "80vh", lg: "80vh", sm: "50vh", xs: "50vh" },
                 backgroundSize: {
-                    md: "800px",
-                    lg: "800px",
-                    sm: "600px",
-                    xs: "350px  ",
+                    md: "600px",
+                    lg: "600px",
+                    sm: "400px",
+                    xs: "250px  ",
                 },
                 backgroundRepeat: "no-repeat",
-                /* backgroundPositionX: "center", */
-                backgroundPosition: "top",
+                backgroundPositionX: "center",
+                backgroundPositionY: "center",
                 display: "flex",
             }}
         >
@@ -28,10 +28,10 @@ export default function Sections() {
                     <Typography
                         align="center"
                         sx={{
-                            background:
+                            /*  background:
                                 "linear-gradient(to right, #CFCFCF 0%, #AC72F7 100%)",
                             "-webkit-background-clip": "text",
-                            "-webkit-text-fill-color": "transparent",
+                            "-webkit-text-fill-color": "transparent", */
                             color: "#fff",
                             fontSize: {
                                 md: "60px",
@@ -42,7 +42,7 @@ export default function Sections() {
                             fontWeight: "bolder",
                         }}
                     >
-                        The Heart of the
+                        Buy, Sell and
                     </Typography>
 
                     <Typography
@@ -62,21 +62,26 @@ export default function Sections() {
                             fontWeight: "bolder",
                         }}
                     >
-                        Interchain
+                        Recieve Payments
                     </Typography>
                     <Typography
                         align="center"
                         sx={{
+                            /*    background:
+                                "linear-gradient(to right, #CFCFCF 0%, #AC72F7 100%)",
+                            "-webkit-background-clip": "text",
+                            "-webkit-text-fill-color": "transparent", */
                             color: "#fff",
                             fontSize: {
-                                md: "15px",
-                                lg: "15px",
-                                sm: "10px",
-                                xs: "10px",
+                                md: "60px",
+                                lg: "70px",
+                                sm: "50px",
+                                xs: "30px",
                             },
+                            fontWeight: "bolder",
                         }}
                     >
-                        Buy, Sell and Recieve Payments in Cryptocurrency
+                        with Ease
                     </Typography>
                 </Box>
             </Grid>
