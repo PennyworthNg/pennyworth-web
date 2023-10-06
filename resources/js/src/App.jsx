@@ -12,7 +12,6 @@ import themes from "./themes";
 // project imports
 import NavigationScroll from "./layout/NavigationScroll";
 import ThemeRoutes from "./routes";
-import { store } from "./store";
 
 // ==============================|| APP ||============================== //
 
@@ -20,16 +19,14 @@ const App = () => {
     const customization = useSelector((state) => state.customization);
 
     return (
-        
-            <StyledEngineProvider injectFirst>
-                <ThemeProvider theme={themes(customization)}>
-                    <CssBaseline />
-                    <NavigationScroll>
-                        <ThemeRoutes />
-                    </NavigationScroll>
-                </ThemeProvider>
-            </StyledEngineProvider>
-        
+        <StyledEngineProvider injectFirst>
+            <ThemeProvider theme={themes(customization)}>
+                <CssBaseline />
+                <NavigationScroll>
+                    <ThemeRoutes />
+                </NavigationScroll>
+            </ThemeProvider>
+        </StyledEngineProvider>
     );
 };
 

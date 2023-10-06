@@ -4,6 +4,7 @@ import { lazy } from "react";
 import Loadable from "../ui-component/Loadable";
 import MinimalLayout from "../layout/MinimalLayout";
 import HomePage from "../views/home/Index";
+import Verification from "../views/pages/authentication/authentication3/Verification";
 
 // login option 3 routing
 const AuthLogin3 = Loadable(
@@ -32,6 +33,10 @@ const AuthenticationRoutes = {
         {
             path: "/register",
             element: <AuthLogin3 />,
+        },
+        {
+            path: "/verify-email",
+            element: <Verification />,
         },
     ],
 };

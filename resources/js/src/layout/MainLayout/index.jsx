@@ -1,5 +1,5 @@
 import { useDispatch, useSelector } from "react-redux";
-import { Outlet } from "react-router-dom";
+import { Outlet, useNavigate } from "react-router-dom";
 
 // material-ui
 import { styled, useTheme } from "@mui/material/styles";
@@ -70,6 +70,13 @@ const MainLayout = () => {
     const handleLeftDrawerToggle = () => {
         dispatch({ type: SET_MENU, opened: !leftDrawerOpened });
     };
+
+    const user = useSelector((state) => state.user);
+    const navigate = useNavigate();
+
+    if (!user.token) {
+        navigate("/login");
+    }
 
     return (
         <Box sx={{ display: "flex" }}>

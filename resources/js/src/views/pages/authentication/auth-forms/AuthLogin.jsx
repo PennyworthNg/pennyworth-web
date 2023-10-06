@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 
 // material-ui
 import { useTheme } from "@mui/material/styles";
@@ -37,161 +37,126 @@ import Google from "../../../../assets/images/icons/social-google.svg";
 import { useNavigate } from "react-router";
 import { ArrowForward } from "@mui/icons-material";
 
+import { setUser } from "../../../../store/usersReducer";
+import axios from "../../../../api/axios";
+import { notify } from "../../../../utils/toast";
+import { ToastContainer } from "react-toastify";
+
 // ============================|| FIREBASE - LOGIN ||============================ //
 
 const FirebaseLogin = ({ ...others }) => {
     const theme = useTheme();
-    const scriptedRef = useScriptRef();
-    const matchDownSM = useMediaQuery(theme.breakpoints.down("md"));
-    const customization = useSelector((state) => state.customization);
     const [checked, setChecked] = useState(true);
 
     const navigate = useNavigate();
-    const googleHandler = async () => {
-        console.error("Login");
-    };
+    const user = useSelector((state) => state.user);
+    const dispatch = useDispatch();
 
-    const [showPassword, setShowPassword] = useState(false);
-    const handleClickShowPassword = () => {
-        setShowPassword(!showPassword);
-    };
+    const [isSubmitting, setIsSubmitting] = useState(false);
 
-    const handleMouseDownPassword = (event) => {
-        event.preventDefault();
+    const [email, setEmail] = useState("");
+
+    const handleSubmit = () => {
+        setIsSubmitting(true);
+        axios
+            .post(
+                "/api/auth",
+                {
+                    email,
+                },
+                {
+                    headers: {
+                        Accept: "application/json",
+                    },
+                }
+            )
+            .then((response) => {
+                dispatch(
+                    setUser({
+                        id: response.data.user.id,
+                        email: response.data.user.email,
+                    })
+                );
+                navigate("/verify-email");
+                notify("Welcome... Please verify email.", "success");
+            })
+            .catch((err) => {
+                setIsSubmitting(false);
+                Object.entries(err.response.data.error).forEach(
+                    ([field, messages]) => {
+                        messages.forEach((message) => {
+                            notify(`${message}`, "error");
+                        });
+                    }
+                );
+            });
     };
 
     return (
         <>
-            <Formik
-                initialValues={{
-                    email: "info@codedthemes.com",
-                    password: "123456",
-                    submit: null,
-                }}
-                validationSchema={Yup.object().shape({
-                    email: Yup.string()
-                        .email("Must be a valid email")
-                        .max(255)
-                        .required("Email is required"),
-                    password: Yup.string()
-                        .max(255)
-                        .required("Password is required"),
-                })}
-                onSubmit={async (
-                    values,
-                    { setErrors, setStatus, setSubmitting }
-                ) => {
-                    try {
-                        if (scriptedRef.current) {
-                            setStatus({ success: true });
-                            setSubmitting(false);
-                        }
-                    } catch (err) {
-                        console.error(err);
-                        if (scriptedRef.current) {
-                            setStatus({ success: false });
-                            setErrors({ submit: err.message });
-                            setSubmitting(false);
-                        }
-                    }
-                }}
+            <ToastContainer />
+            <FormControl fullWidth sx={{ ...theme.typography.customInput }}>
+                <InputLabel htmlFor="outlined-adornment-email-login">
+                    Email Address
+                </InputLabel>
+                <OutlinedInput
+                    id="outlined-adornment-email-login"
+                    type="email"
+                    value={email}
+                    name="email"
+                    onChange={(e) => setEmail(e.target.value)}
+                    label="Email Address"
+                    inputProps={{}}
+                />
+            </FormControl>
+            <Stack
+                direction="row"
+                alignItems="center"
+                justifyContent="space-between"
+                spacing={1}
             >
-                {({
-                    errors,
-                    handleBlur,
-                    handleChange,
-                    handleSubmit,
-                    isSubmitting,
-                    touched,
-                    values,
-                }) => (
-                    <form noValidate onSubmit={handleSubmit} {...others}>
-                        <FormControl
-                            fullWidth
-                            error={Boolean(touched.email && errors.email)}
-                            sx={{ ...theme.typography.customInput }}
-                        >
-                            <InputLabel htmlFor="outlined-adornment-email-login">
-                                Email Address / Username
-                            </InputLabel>
-                            <OutlinedInput
-                                id="outlined-adornment-email-login"
-                                type="email"
-                                value={values.email}
-                                name="email"
-                                onBlur={handleBlur}
-                                onChange={handleChange}
-                                label="Email Address / Username"
-                                inputProps={{}}
-                            />
-                            {touched.email && errors.email && (
-                                <FormHelperText
-                                    error
-                                    id="standard-weight-helper-text-email-login"
-                                >
-                                    {errors.email}
-                                </FormHelperText>
-                            )}
-                        </FormControl>
+                <FormControlLabel
+                    control={
+                        <Checkbox
+                            checked={checked}
+                            onChange={(event) =>
+                                setChecked(event.target.checked)
+                            }
+                            name="checked"
+                            color="primary"
+                        />
+                    }
+                    label="Remember me"
+                />
+                <Typography
+                    variant="subtitle1"
+                    color="secondary"
+                    sx={{
+                        textDecoration: "none",
+                        cursor: "pointer",
+                    }}
+                >
+                    Forgot Email?
+                </Typography>
+            </Stack>
 
-                        <Stack
-                            direction="row"
-                            alignItems="center"
-                            justifyContent="space-between"
-                            spacing={1}
-                        >
-                            <FormControlLabel
-                                control={
-                                    <Checkbox
-                                        checked={checked}
-                                        onChange={(event) =>
-                                            setChecked(event.target.checked)
-                                        }
-                                        name="checked"
-                                        color="primary"
-                                    />
-                                }
-                                label="Remember me"
-                            />
-                            <Typography
-                                variant="subtitle1"
-                                color="secondary"
-                                sx={{
-                                    textDecoration: "none",
-                                    cursor: "pointer",
-                                }}
-                            >
-                                Forgot Email?
-                            </Typography>
-                        </Stack>
-                        {errors.submit && (
-                            <Box sx={{ mt: 3 }}>
-                                <FormHelperText error>
-                                    {errors.submit}
-                                </FormHelperText>
-                            </Box>
-                        )}
-
-                        <Box sx={{ mt: 2 }}>
-                            <AnimateButton>
-                                <Button
-                                    endIcon={<ArrowForward />}
-                                    disableElevation
-                                    disabled={isSubmitting}
-                                    onClick={() => navigate("/dashboard")}
-                                    fullWidth
-                                    size="large"
-                                    type="submit"
-                                    variant="contained"
-                                    color="secondary"
-                                >
-                                    Continue
-                                </Button>
-                            </AnimateButton>
-                        </Box>
-                    </form>
-                )}
-            </Formik>
+            <Box sx={{ mt: 2 }}>
+                <AnimateButton>
+                    <Button
+                        endIcon={<ArrowForward />}
+                        disableElevation
+                        disabled={isSubmitting}
+                        onClick={handleSubmit}
+                        fullWidth
+                        size="large"
+                        type="submit"
+                        variant="contained"
+                        color="secondary"
+                    >
+                        Continue
+                    </Button>
+                </AnimateButton>
+            </Box>
         </>
     );
 };
