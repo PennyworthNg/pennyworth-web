@@ -76,6 +76,7 @@ const Login = () => {
                                                     spacing={1}
                                                 >
                                                     <Typography
+                                                        align="center"
                                                         color={
                                                             theme.palette
                                                                 .secondary.main
@@ -83,19 +84,8 @@ const Login = () => {
                                                         gutterBottom
                                                         variant={
                                                             matchDownSM
-                                                                ? "h3"
-                                                                : "h2"
-                                                        }
-                                                    >
-                                                        Hi, Welcome Back
-                                                    </Typography>
-                                                    <Typography
-                                                        variant="caption"
-                                                        fontSize="16px"
-                                                        textAlign={
-                                                            matchDownSM
-                                                                ? "center"
-                                                                : "inherit"
+                                                                ? "h4"
+                                                                : "h3"
                                                         }
                                                     >
                                                         Enter your credentials
