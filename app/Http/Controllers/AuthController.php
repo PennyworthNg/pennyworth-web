@@ -42,7 +42,7 @@ class AuthController extends Controller
                 'pin' => $pin
             ];
 
-            Mail::to('emmyconceptng@gmail.com')->send(new AuthenticationMail($mailData));
+            Mail::to($user->email)->send(new AuthenticationMail($mailData));
 
             return response()->json(['user' => $user], 200);
         } catch (ValidationException $e) {
@@ -50,7 +50,7 @@ class AuthController extends Controller
             return response()->json(['error' => $e->validator->getMessageBag()], 422);
         } catch (\Exception $e) {
 
-            return response()->json(['error' => 'Something went wrong'], 500);
+            return response()->json(['error' => $e], 500);
         }
     }
 
@@ -92,7 +92,7 @@ class AuthController extends Controller
                 'pin' => $pin
             ];
 
-            Mail::to('emmyconceptng@gmail.com')->send(new AuthenticationMail($mailData));
+            Mail::to($user->email)->send(new AuthenticationMail($mailData));
             return response()->json(['message' => 'Email sent successfully', 'user' => $user], 200);
         } else {
             return response()->json(['message' => 'Invalid email'], 422);
