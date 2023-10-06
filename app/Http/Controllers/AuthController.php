@@ -32,7 +32,7 @@ class AuthController extends Controller
             } else {
                 $user->update([
                     'token' => $pin,
-                    'verified' => false
+                    'verified' => 'false'
                 ]);
             }
 
