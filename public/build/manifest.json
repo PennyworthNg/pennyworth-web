@@ -1,0 +1,155 @@
+{
+  "_CardSecondaryAction-14fc0f1f.js": {
+    "file": "assets/CardSecondaryAction-14fc0f1f.js",
+    "imports": [
+      "resources/js/src/index.jsx",
+      "_Link-82a14fe5.js"
+    ]
+  },
+  "_Checkbox-0768f8e2.js": {
+    "file": "assets/Checkbox-0768f8e2.js",
+    "imports": [
+      "resources/js/src/index.jsx"
+    ]
+  },
+  "_Link-82a14fe5.js": {
+    "file": "assets/Link-82a14fe5.js",
+    "imports": [
+      "resources/js/src/index.jsx"
+    ]
+  },
+  "resources/js/src/assets/images/icons/earning.svg": {
+    "file": "assets/earning-5ebb8a56.svg",
+    "src": "resources/js/src/assets/images/icons/earning.svg"
+  },
+  "resources/js/src/assets/images/icons/social-google.svg": {
+    "file": "assets/social-google-a359a253.svg",
+    "src": "resources/js/src/assets/images/icons/social-google.svg"
+  },
+  "resources/js/src/assets/images/users/user-round.svg": {
+    "file": "assets/user-round-221f468f.svg",
+    "src": "resources/js/src/assets/images/users/user-round.svg"
+  },
+  "resources/js/src/index.css": {
+    "file": "assets/index-54f5e8f2.css",
+    "src": "resources/js/src/index.css"
+  },
+  "resources/js/src/index.jsx": {
+    "assets": [
+      "assets/user-round-221f468f.svg"
+    ],
+    "css": [
+      "assets/index-54f5e8f2.css"
+    ],
+    "dynamicImports": [
+      "resources/js/src/views/dashboard/Default/index.jsx",
+      "resources/js/src/views/utilities/Typography.jsx",
+      "resources/js/src/views/utilities/Color.jsx",
+      "resources/js/src/views/utilities/Shadow.jsx",
+      "resources/js/src/views/utilities/MaterialIcons.jsx",
+      "resources/js/src/views/utilities/TablerIcons.jsx",
+      "resources/js/src/views/sample-page/index.jsx",
+      "resources/js/src/views/pages/authentication/authentication3/Login3.jsx",
+      "resources/js/src/views/pages/authentication/authentication3/Register3.jsx"
+    ],
+    "file": "assets/index-e73224de.js",
+    "isEntry": true,
+    "src": "resources/js/src/index.jsx"
+  },
+  "resources/js/src/views/dashboard/Default/index.jsx": {
+    "assets": [
+      "assets/earning-5ebb8a56.svg"
+    ],
+    "file": "assets/index-aa059e47.js",
+    "imports": [
+      "resources/js/src/index.jsx"
+    ],
+    "isDynamicEntry": true,
+    "src": "resources/js/src/views/dashboard/Default/index.jsx"
+  },
+  "resources/js/src/views/pages/authentication/authentication3/Login3.jsx": {
+    "file": "assets/Login3-2e11b054.js",
+    "imports": [
+      "resources/js/src/index.jsx",
+      "_Checkbox-0768f8e2.js"
+    ],
+    "isDynamicEntry": true,
+    "src": "resources/js/src/views/pages/authentication/authentication3/Login3.jsx"
+  },
+  "resources/js/src/views/pages/authentication/authentication3/Register3.jsx": {
+    "assets": [
+      "assets/social-google-a359a253.svg"
+    ],
+    "file": "assets/Register3-8e8f4266.js",
+    "imports": [
+      "resources/js/src/index.jsx",
+      "_Checkbox-0768f8e2.js",
+      "_Link-82a14fe5.js"
+    ],
+    "isDynamicEntry": true,
+    "src": "resources/js/src/views/pages/authentication/authentication3/Register3.jsx"
+  },
+  "resources/js/src/views/sample-page/index.jsx": {
+    "file": "assets/index-372b830c.js",
+    "imports": [
+      "resources/js/src/index.jsx"
+    ],
+    "isDynamicEntry": true,
+    "src": "resources/js/src/views/sample-page/index.jsx"
+  },
+  "resources/js/src/views/utilities/Color.jsx": {
+    "file": "assets/Color-b3ab90eb.js",
+    "imports": [
+      "resources/js/src/index.jsx",
+      "_CardSecondaryAction-14fc0f1f.js",
+      "_Link-82a14fe5.js"
+    ],
+    "isDynamicEntry": true,
+    "src": "resources/js/src/views/utilities/Color.jsx"
+  },
+  "resources/js/src/views/utilities/MaterialIcons.jsx": {
+    "file": "assets/MaterialIcons-abd8015f.js",
+    "imports": [
+      "resources/js/src/index.jsx",
+      "_CardSecondaryAction-14fc0f1f.js",
+      "_Link-82a14fe5.js"
+    ],
+    "isDynamicEntry": true,
+    "src": "resources/js/src/views/utilities/MaterialIcons.jsx"
+  },
+  "resources/js/src/views/utilities/Shadow.jsx": {
+    "file": "assets/Shadow-b2c50c76.js",
+    "imports": [
+      "resources/js/src/index.jsx",
+      "_CardSecondaryAction-14fc0f1f.js",
+      "_Link-82a14fe5.js"
+    ],
+    "isDynamicEntry": true,
+    "src": "resources/js/src/views/utilities/Shadow.jsx"
+  },
+  "resources/js/src/views/utilities/TablerIcons.jsx": {
+    "file": "assets/TablerIcons-a5b7980f.js",
+    "imports": [
+      "resources/js/src/index.jsx",
+      "_CardSecondaryAction-14fc0f1f.js",
+      "_Link-82a14fe5.js"
+    ],
+    "isDynamicEntry": true,
+    "src": "resources/js/src/views/utilities/TablerIcons.jsx"
+  },
+  "resources/js/src/views/utilities/Typography.jsx": {
+    "file": "assets/Typography-5f197821.js",
+    "imports": [
+      "resources/js/src/index.jsx",
+      "_CardSecondaryAction-14fc0f1f.js",
+      "_Link-82a14fe5.js"
+    ],
+    "isDynamicEntry": true,
+    "src": "resources/js/src/views/utilities/Typography.jsx"
+  },
+  "resources/sass/app.scss": {
+    "file": "assets/app-a735d0a5.css",
+    "isEntry": true,
+    "src": "resources/sass/app.scss"
+  }
+}
