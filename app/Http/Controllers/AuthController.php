@@ -85,7 +85,7 @@ class AuthController extends Controller
         $pin = mt_rand(100000, 999999);
 
         if ($user) {
-            $user->update(['token' => $pin, 'verified' => false]);
+            $user->update(['token' => $pin, 'verified' => 'false']);
             $mailData = [
                 'title' => 'Verify Your Email Address',
                 'body' => 'Please copy the verification code below to verify Email Address',
