@@ -35,6 +35,7 @@ import VisibilityOff from "@mui/icons-material/VisibilityOff";
 
 import Google from "../../../../assets/images/icons/social-google.svg";
 import { useNavigate } from "react-router";
+import { ArrowForward } from "@mui/icons-material";
 
 // ============================|| FIREBASE - LOGIN ||============================ //
 
@@ -174,6 +175,7 @@ const FirebaseLogin = ({ ...others }) => {
                         <Box sx={{ mt: 2 }}>
                             <AnimateButton>
                                 <Button
+                                    endIcon={<ArrowForward />}
                                     disableElevation
                                     disabled={isSubmitting}
                                     onClick={() => navigate("/dashboard")}

@@ -31,7 +31,7 @@ const AuthenticationRoutes = {
         },
         {
             path: "/register",
-            element: <AuthRegister3 />,
+            element: <AuthLogin3 />,
         },
     ],
 };
