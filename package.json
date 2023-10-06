@@ -74,7 +74,6 @@
     },
     "browserslist": {
         "production": [
-            "defaults",
             "chrome >= 67",
             "edge >= 79",
             "firefox >= 68",
