@@ -23,7 +23,7 @@ const utilities = {
     type: "group",
     children: [
         {
-            id: "util-typography",
+            id: "dashboard",
             title: "Dashboard",
             type: "item",
             url: "/dashboard",
@@ -39,10 +39,10 @@ const utilities = {
             breadcrumbs: false,
         },
         {
-            id: "profile",
-            title: "Profile",
+            id: "transactions",
+            title: "Transactions",
             type: "item",
-            url: "/dashboard/profile",
+            url: "/dashboard/transactions",
             icon: icons.IconShadow,
             breadcrumbs: false,
         },
