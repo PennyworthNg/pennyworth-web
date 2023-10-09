@@ -7,11 +7,16 @@ import DialogActions from "@mui/material/DialogActions";
 import IconButton from "@mui/material/IconButton";
 import CloseIcon from "@mui/icons-material/Close";
 import Typography from "@mui/material/Typography";
-import { useState } from "react";
-import { Box, Grid } from "@mui/material";
+import { useEffect, useState } from "react";
+import { Box, FormControl, Grid, OutlinedInput, Stack } from "@mui/material";
 import MainCard from "../../../ui-component/cards/MainCard";
-import { IconWallet } from "@tabler/icons";
-import { WalletRounded } from "@mui/icons-material";
+import AnimateButton from "../../../ui-component/extended/AnimateButton";
+import { createWallet } from "../../../api/Wallets";
+import { useSelector } from "react-redux";
+import { notify } from "../../../utils/toast";
+import axios from "../../../api/axios";
+import WalletClient from "aptos-wallet-api/src/wallet-client";
+import { ArrowForward } from "@mui/icons-material";
 
 const BootstrapDialog = styled(Dialog)(({ theme }) => ({
     "& .MuiDialogContent-root": {
@@ -85,12 +90,53 @@ const CardWrapper2 = styled(MainCard)(({ theme }) => ({
     },
 }));
 
-export default function WalletModal({ open, setOpen }) {
+export default function WalletModal({ open, setOpen, setWallets }) {
     const theme = useTheme();
     const handleClose = () => {
         setOpen(false);
     };
 
+    const user = useSelector((state) => state.user);
+    const [isCreating, setIsCreating] = useState(false);
+    const [isImporting, setIsImporting] = useState(false);
+
+    const handleCreateWallet = () => {
+        setIsCreating(true);
+        const NODE_URL = "https://fullnode.testnet.aptoslabs.com/v1";
+        const FAUCET_URL = "https://faucet.net.aptoslabs.com";
+        const walletClient = new WalletClient(NODE_URL, FAUCET_URL);
+        walletClient
+            .createNewAccount()
+            .then((response) => {
+                console.log(response.data);
+                axios
+                    .post(`/api/user/${user?.id}/wallet/create`, {
+                        name:
+                            "pennywallet" + Math.floor(Math.random() * 90) + 10,
+                        address: response.data.accountAddress.hexString,
+                        public_key: response.data.signingKey.publicKey,
+                        private_key: response.data.signingKey.secretKey,
+                        mnemonic: response.data.mnemonic,
+                    })
+                    .then(async (response) => {
+                        setIsCreating(false);
+                        notify("Wallet Create Successfully", "success");
+                        setWallets((prev) => [...prev, response.data.wallet]);
+                    })
+                    .catch((err) => {
+                        notify("Something went wrong", "error");
+                        setIsCreating(false);
+                    });
+            })
+            .catch((err) => {
+                console.log(err);
+                setIsCreating(false);
+            });
+    };
+
+    const handleImportWallet = () => {
+        setIsImporting(true);
+    };
     return (
         <div>
             <BootstrapDialog
@@ -98,99 +144,230 @@ export default function WalletModal({ open, setOpen }) {
                 aria-labelledby="customized-dialog-title"
                 open={open}
             >
-                <DialogContent dividers sx={{ p: 5 }}>
-                    <Grid container spacing={2}>
-                        <Grid item xs={12} md={6} lg={6} sm={12}>
-                            <CardWrapper
-                                border={false}
-                                content={false}
-                                sx={{ cursor: "pointer" }}
-                            >
-                                <Box sx={{ p: 2.25 }}>
-                                    <Grid container direction="column">
-                                        <Grid item>
-                                            <Grid item>
-                                                <Typography
-                                                    align="center"
-                                                    component="div"
-                                                    sx={{
-                                                        fontSize: "5rem",
-                                                        fontWeight: 500,
-                                                        mr: 1,
-                                                        mt: 1.75,
-                                                        mb: 0.75,
-                                                    }}
-                                                >
-                                                    <IconWallet
-                                                        sx={{ width: 1000 }}
-                                                    />
-                                                </Typography>
-                                            </Grid>
-                                        </Grid>
-                                        <Grid item sx={{ mb: 1.25 }}>
-                                            <Typography
-                                                align="center"
-                                                sx={{
-                                                    fontSize: "1rem",
-                                                    fontWeight: 500,
-                                                    color: theme.palette
-                                                        .secondary[200],
-                                                }}
+                <DialogContent dividers>
+                    {!isImporting ? (
+                        <Grid container spacing={2} sx={{ p: 3 }}>
+                            <Grid item xs={12} md={6} lg={6} sm={12}>
+                                <AnimateButton>
+                                    <CardWrapper
+                                        border={false}
+                                        content={false}
+                                        sx={{
+                                            cursor: "pointer",
+                                            height: "250px",
+                                            opacity: isCreating ? "0.5" : 1,
+                                        }}
+                                        onClick={
+                                            isCreating
+                                                ? null
+                                                : handleCreateWallet
+                                        }
+                                    >
+                                        <Box sx={{ p: 2.25 }}>
+                                            <Grid
+                                                container
+                                                justifyContent="center"
                                             >
-                                                Create Wallet
-                                            </Typography>
-                                        </Grid>
-                                    </Grid>
-                                </Box>
-                            </CardWrapper>
-                        </Grid>
-                        <Grid item xs={12} md={6} lg={6} sm={12}>
-                            <CardWrapper2
-                                border={false}
-                                content={false}
-                                sx={{ cursor: "pointer" }}
-                            >
-                                <Box sx={{ p: 2.25 }}>
-                                    <Grid container direction="column">
-                                        <Grid item>
-                                            <Grid item>
-                                                <Typography
-                                                    align="center"
-                                                    component="div"
-                                                    sx={{
-                                                        fontSize: "2.125rem",
-                                                        fontWeight: 500,
-                                                        mr: 1,
-                                                        mt: 1.75,
-                                                        mb: 0.75,
-                                                    }}
-                                                >
-                                                    <WalletRounded
-                                                        sx={{ width: 100 }}
-                                                    />
-                                                </Typography>
+                                                <Grid item>
+                                                    <Typography
+                                                        component="div"
+                                                        sx={{
+                                                            mt: 1.75,
+                                                            mb: 0.75,
+                                                        }}
+                                                    >
+                                                        <Box
+                                                            component="img"
+                                                            src="assets/images/create-wallet.png"
+                                                            sx={{
+                                                                width: "150px",
+                                                            }}
+                                                        />
+                                                    </Typography>
+                                                </Grid>
+
+                                                <Grid item sx={{ mb: 1.25 }}>
+                                                    <Typography
+                                                        align="center"
+                                                        sx={{
+                                                            fontSize: "1rem",
+                                                            fontWeight: 500,
+                                                        }}
+                                                    >
+                                                        Create Wallet
+                                                    </Typography>
+                                                </Grid>
                                             </Grid>
-                                        </Grid>
-                                        <Grid item sx={{ mb: 1.25 }}>
-                                            <Typography
-                                                align="center"
-                                                sx={{
-                                                    fontSize: "1rem",
-                                                    fontWeight: 500,
-                                                    color: theme.palette
-                                                        .secondary[200],
-                                                }}
+                                        </Box>
+                                    </CardWrapper>
+                                </AnimateButton>
+                            </Grid>
+                            <Grid item xs={12} md={6} lg={6} sm={12}>
+                                <AnimateButton>
+                                    <CardWrapper2
+                                        border={false}
+                                        content={false}
+                                        sx={{
+                                            cursor: "pointer",
+                                            height: "250px",
+                                            opacity: isImporting ? "0.5" : 1,
+                                        }}
+                                        onClick={
+                                            isImporting
+                                                ? null
+                                                : handleImportWallet
+                                        }
+                                    >
+                                        <Box sx={{ p: 2.25 }}>
+                                            <Grid
+                                                container
+                                                justifyContent="center"
                                             >
-                                                Import Wallet
-                                            </Typography>
-                                        </Grid>
-                                    </Grid>
-                                </Box>
-                            </CardWrapper2>
+                                                <Grid item>
+                                                    <Typography
+                                                        component="div"
+                                                        sx={{
+                                                            mt: 1.75,
+                                                            mb: 0.75,
+                                                        }}
+                                                    >
+                                                        <Box
+                                                            component="img"
+                                                            src="assets/images/import-wallet.png"
+                                                            sx={{
+                                                                width: "200px",
+                                                            }}
+                                                        />
+                                                    </Typography>
+                                                </Grid>
+                                                <Grid item sx={{ mb: 1.25 }}>
+                                                    <Typography
+                                                        align="center"
+                                                        sx={{
+                                                            fontSize: "1rem",
+                                                            fontWeight: 500,
+                                                        }}
+                                                    >
+                                                        Import Wallet
+                                                    </Typography>
+                                                </Grid>
+                                            </Grid>
+                                        </Box>
+                                    </CardWrapper2>
+                                </AnimateButton>
+                            </Grid>
                         </Grid>
-                    </Grid>
+                    ) : (
+                        <SeedPhrase />
+                    )}
                 </DialogContent>
             </BootstrapDialog>
         </div>
+    );
+}
+
+function SeedPhrase() {
+    const theme = useTheme();
+
+    const user = useSelector((state) => state.user);
+
+    const [isSubmitting, setIsSubmitting] = useState(false);
+    const [seed, setSeed] = useState([
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+    ]);
+
+    const handleChange = (event, index) => {
+        const inputValue = event.target.value;
+
+        const updatedPin = [...seed];
+        updatedPin[index] = event.target.value;
+
+        /*  // Focus on the next input field if not the last one
+        if (index < updatedPin.length - 1 && event.target.value !== "") {
+            const nextInput = document.getElementById(`seed${index + 1}`);
+            if (nextInput) {
+                nextInput.focus();
+            }
+        } */
+
+        setSeed(updatedPin);
+    };
+
+    const handleBackspace = (event, index) => {
+        if (event.key === "Backspace") {
+            const updatedPin = [...seed];
+            updatedPin[index] = "";
+            setSeed(updatedPin);
+
+            if (index > 0) {
+                const prevInput = document.getElementById(`seed${index - 1}`);
+                if (prevInput) {
+                    prevInput.focus();
+                }
+            }
+        }
+    };
+    const handleBlur = () => {
+        // Check if the last index is filled, and submit if it is
+        if (seed[seed.length - 1] !== "") {
+            handleSubmit();
+        }
+    };
+
+    const handleSubmit = () => {
+        setIsSubmitting(true);
+    };
+    return (
+        <Box>
+            <Grid container spacing={1}>
+                {seed.map((_seed, index) => (
+                    <Grid item md={4} lg={4} sm={4} xs={6}>
+                        <FormControl
+                            fullWidth
+                            sx={{ ...theme.typography.customInput }}
+                        >
+                            <OutlinedInput
+                                size="small"
+                                id={`seed${index}`}
+                                value={seed[index]}
+                                onChange={(e) => handleChange(e, index)}
+                                label="seed"
+                                onKeyDown={(e) => handleBackspace(e, index)}
+                                onBlur={handleBlur}
+                            />
+                        </FormControl>
+                    </Grid>
+                ))}
+            </Grid>
+
+            <Box sx={{ mt: 2 }}>
+                <AnimateButton>
+                    <Button
+                        endIcon={<ArrowForward />}
+                        disableElevation
+                        disabled={isSubmitting}
+                        onClick={handleSubmit}
+                        fullWidth
+                        size="large"
+                        type="submit"
+                        variant="contained"
+                        color="secondary"
+                    >
+                        Import
+                    </Button>
+                </AnimateButton>
+            </Box>
+        </Box>
     );
 }

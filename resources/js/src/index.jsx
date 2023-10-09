@@ -6,6 +6,9 @@ import "react-toastify/dist/ReactToastify.css";
 import { BrowserRouter } from "react-router-dom";
 import { Provider } from "react-redux";
 
+import { PetraWallet } from "petra-plugin-wallet-adapter";
+import { AptosWalletAdapterProvider } from "@aptos-labs/wallet-adapter-react";
+
 // project imports
 import * as serviceWorker from "./serviceWorker";
 import App from "./App";
@@ -17,15 +20,21 @@ import store from "./store";
 
 // ==============================|| REACT DOM RENDER  ||============================== //
 
+const wallets = [new PetraWallet()];
+
 const container = document.getElementById("main");
 const root = createRoot(container); // createRoot(container!) if you use TypeScript
-root.render(
-    <Provider store={store}>
-        <BrowserRouter basename={config.basename}>
-            <App />
-        </BrowserRouter>
-    </Provider>
-);
+window.addEventListener("load", () => {
+    root.render(
+        <Provider store={store}>
+            <AptosWalletAdapterProvider plugins={wallets} autoConnect={true}>
+                <BrowserRouter basename={config.basename}>
+                    <App />
+                </BrowserRouter>
+            </AptosWalletAdapterProvider>
+        </Provider>
+    );
+});
 
 // If you want your app to work offline and load faster, you can change
 // unregister() to register() below. Note this comes with some pitfalls.

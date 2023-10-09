@@ -49,7 +49,7 @@ const CardWrapper = styled(MainCard)(({ theme }) => ({
 
 // ===========================|| DASHBOARD DEFAULT - NO WALLET CARD ||=========================== //
 
-export const NoWalletCard = ({ isLoading }) => {
+export const NoWalletCard = ({ isLoading, setWallets }) => {
     const theme = useTheme();
     const [openModal, setOpenModal] = useState(false);
 
@@ -103,7 +103,11 @@ export const NoWalletCard = ({ isLoading }) => {
                     </CardWrapper>
                 </AnimateButton>
             )}
-            <WalletModal open={openModal} setOpen={setOpenModal} />
+            <WalletModal
+                open={openModal}
+                setOpen={setOpenModal}
+                setWallets={setWallets}
+            />
         </>
     );
 };

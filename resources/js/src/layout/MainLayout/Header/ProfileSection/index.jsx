@@ -89,6 +89,7 @@ const ProfileSection = () => {
 
     const handleLogout = () => {
         dispatch(clearUser());
+        localStorage.clear()
         navigate("/");
     };
 

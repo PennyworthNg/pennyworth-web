@@ -3,6 +3,7 @@ import { lazy } from "react";
 // project imports
 import MainLayout from "../layout/MainLayout";
 import Loadable from "../ui-component/Loadable";
+import { Wallets } from "../views/pages/wallet";
 
 // dashboard routing
 const DashboardDefault = Loadable(
@@ -34,6 +35,10 @@ const MainRoutes = {
         {
             path: "/dashboard",
             element: <DashboardDefault />,
+        },
+        {
+            path: "/dashboard/wallets",
+            element: <Wallets />,
         },
 
         {

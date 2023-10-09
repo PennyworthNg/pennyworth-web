@@ -137,6 +137,7 @@ export default function AuthVerify({ ...others }) {
                 }
             )
             .then((response) => {
+                localStorage.setItem("access_token", response.data.token);
                 dispatch(
                     setUser({
                         id: response.data.user.id,
