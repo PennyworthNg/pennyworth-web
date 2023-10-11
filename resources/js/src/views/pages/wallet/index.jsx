@@ -49,15 +49,18 @@ export const Wallets = () => {
                         mb={5}
                     >
                         <Typography variant="h4">Wallets</Typography>
-                        <Button
-                            variant="contained"
-                            onClick={() => setOpenModal(true)}
-                        >
-                            Add Wallet
-                        </Button>
+                        {wallets?.length < 4 ? (
+                            <Button
+                                variant="contained"
+                                onClick={() => setOpenModal(true)}
+                            >
+                                Add Wallet
+                            </Button>
+                        ) : null}
                     </Stack>
                     <MainCard>
-                        {wallets?.length > 0 ? (
+                        {wallets?.length > 0 
+                        ? (
                             <List>
                                 {wallets.map((wallet, index) => (
                                     <>

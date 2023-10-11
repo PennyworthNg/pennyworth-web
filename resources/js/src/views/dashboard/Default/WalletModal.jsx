@@ -17,6 +17,7 @@ import { notify } from "../../../utils/toast";
 import axios from "../../../api/axios";
 import WalletClient from "aptos-wallet-api/src/wallet-client";
 import { ArrowForward } from "@mui/icons-material";
+import { ToastContainer } from "react-toastify";
 
 const BootstrapDialog = styled(Dialog)(({ theme }) => ({
     "& .MuiDialogContent-root": {
@@ -94,6 +95,7 @@ export default function WalletModal({ open, setOpen, setWallets }) {
     const theme = useTheme();
     const handleClose = () => {
         setOpen(false);
+        setIsImporting(false);
     };
 
     const user = useSelector((state) => state.user);
@@ -120,6 +122,7 @@ export default function WalletModal({ open, setOpen, setWallets }) {
                     })
                     .then(async (response) => {
                         setIsCreating(false);
+                        handleClose();
                         notify("Wallet Create Successfully", "success");
                         setWallets((prev) => [...prev, response.data.wallet]);
                     })
@@ -130,6 +133,7 @@ export default function WalletModal({ open, setOpen, setWallets }) {
             })
             .catch((err) => {
                 console.log(err);
+                notify(err, "error");
                 setIsCreating(false);
             });
     };
@@ -139,10 +143,12 @@ export default function WalletModal({ open, setOpen, setWallets }) {
     };
     return (
         <div>
+            <ToastContainer />
             <BootstrapDialog
                 onClose={handleClose}
                 aria-labelledby="customized-dialog-title"
                 open={open}
+                onBackdropClick={handleClose}
             >
                 <DialogContent dividers>
                     {!isImporting ? (
@@ -258,7 +264,11 @@ export default function WalletModal({ open, setOpen, setWallets }) {
                             </Grid>
                         </Grid>
                     ) : (
-                        <SeedPhrase />
+                        <SeedPhrase
+                            setWallets={setWallets}
+                            handleClose={handleClose}
+                            setIsImporting={setIsImporting}
+                        />
                     )}
                 </DialogContent>
             </BootstrapDialog>
@@ -266,7 +276,7 @@ export default function WalletModal({ open, setOpen, setWallets }) {
     );
 }
 
-function SeedPhrase() {
+function SeedPhrase({ setWallets, handleClose, setIsImporting }) {
     const theme = useTheme();
 
     const user = useSelector((state) => state.user);
@@ -324,12 +334,81 @@ function SeedPhrase() {
             handleSubmit();
         }
     };
+    const handlePaste = (event) => {
+        event.preventDefault(); // Prevent the default paste behavior
 
+        const clipboardData = event.clipboardData || window.clipboardData;
+        const pastedText = clipboardData.getData("text");
+
+        // Split the pasted text by spaces and update the seed array
+        const words = pastedText.split(" ");
+        const updatedSeed = [...seed];
+        words.forEach((word, i) => {
+            if (i < updatedSeed.length) {
+                updatedSeed[i] = word;
+            }
+        });
+
+        setSeed(updatedSeed);
+
+        // Check if all fields are filled
+        const allFieldsFilled = updatedSeed.every((value) => value !== "");
+
+        if (allFieldsFilled) {
+            handleSubmit();
+        }
+    };
     const handleSubmit = () => {
         setIsSubmitting(true);
+
+        const NODE_URL = "https://fullnode.testnet.aptoslabs.com/v1";
+        const FAUCET_URL = "https://faucet.net.aptoslabs.com";
+        const walletClient = new WalletClient(NODE_URL, FAUCET_URL);
+        walletClient
+            .getAccountFromMnemonic(seed.join(" "))
+            .then((response) => {
+                console.log(response.data);
+                if (response.data === "Invalid Seed Phrase") {
+                    notify(response.data, "error");
+                    setIsSubmitting(false);
+                } else {
+                    axios
+                        .post(`/api/user/${user?.id}/wallet/create`, {
+                            name:
+                                "pennywallet" +
+                                Math.floor(Math.random() * 90) +
+                                10,
+                            address: response.data.accountAddress.hexString,
+                            public_key: response.data.signingKey.publicKey,
+                            private_key: response.data.signingKey.secretKey,
+                            mnemonic: response.data.mnemonic,
+                        })
+                        .then(async (response) => {
+                            setIsSubmitting(false);
+                            handleClose();
+                            notify("Wallet Create Successfully", "success");
+                            setWallets((prev) => [
+                                ...prev,
+                                response.data.wallet,
+                            ]);
+                        })
+                        .catch((err) => {
+                            notify("Something went wrong", "error");
+                            setIsSubmitting(false);
+                        });
+                }
+            })
+            .catch((err) => {
+                console.log(err);
+                setIsImporting(false);
+                handleClose();
+                notify(err, "error");
+                setIsSubmitting(false);
+            });
     };
     return (
         <Box>
+            <ToastContainer />
             <Grid container spacing={1}>
                 {seed.map((_seed, index) => (
                     <Grid item md={4} lg={4} sm={4} xs={6}>
@@ -345,6 +424,7 @@ function SeedPhrase() {
                                 label="seed"
                                 onKeyDown={(e) => handleBackspace(e, index)}
                                 onBlur={handleBlur}
+                                onPaste={handlePaste}
                             />
                         </FormControl>
                     </Grid>

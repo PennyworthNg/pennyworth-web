@@ -65,6 +65,12 @@ export default function AuthVerify({ ...others }) {
         }
     };
 
+    const handlePaste = (event, index) => {
+        event.preventDefault();
+        const clipboard = event.clipboardData || window.clipboardData;
+        const pasteData = 
+    };
+
     const handleBackspace = (event, index) => {
         if (event.key === "Backspace") {
             const updatedPin = [...pin];
