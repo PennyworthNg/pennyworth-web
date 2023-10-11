@@ -3,9 +3,7 @@ import { styled, useTheme } from "@mui/material/styles";
 import Dialog from "@mui/material/Dialog";
 import DialogTitle from "@mui/material/DialogTitle";
 import DialogContent from "@mui/material/DialogContent";
-import DialogActions from "@mui/material/DialogActions";
-import IconButton from "@mui/material/IconButton";
-import CloseIcon from "@mui/icons-material/Close";
+
 import Typography from "@mui/material/Typography";
 import { useEffect, useState } from "react";
 import { Box, FormControl, Grid, OutlinedInput, Stack } from "@mui/material";
@@ -18,6 +16,23 @@ import axios from "../../../api/axios";
 import WalletClient from "aptos-wallet-api/src/wallet-client";
 import { ArrowForward } from "@mui/icons-material";
 import { ToastContainer } from "react-toastify";
+import bs58 from "bs58";
+import { WalletNotConnectedError } from "@solana/wallet-adapter-base";
+import { useConnection, useWallet } from "@solana/wallet-adapter-react";
+import {
+    Keypair,
+    SystemProgram,
+    Transaction,
+    Connection,
+    clusterApiUrl,
+} from "@solana/web3.js";
+import {
+    mnemonicGenerate,
+    mnemonicToMiniSecret,
+    mnemonicValidate,
+    ed25519PairFromSeed,
+    base64Encode,
+} from "@polkadot/util-crypto";
 
 const BootstrapDialog = styled(Dialog)(({ theme }) => ({
     "& .MuiDialogContent-root": {
@@ -102,38 +117,58 @@ export default function WalletModal({ open, setOpen, setWallets }) {
     const [isCreating, setIsCreating] = useState(false);
     const [isImporting, setIsImporting] = useState(false);
 
-    const handleCreateWallet = () => {
+    async function generateSolanaSeedPhrase() {
+        try {
+            // Generate a new keypair
+            const keypair = Keypair.generate();
+
+            // Get the public key (address) from the keypair
+            const publicKey = keypair.publicKey.toBase58();
+            const publicKeyEncrypt = keypair.publicKey.toString("hex");
+
+            // Display the public key (address) and the secret key (seed phrase)
+            console.log("Generated Solana Address:", publicKeyEncrypt);
+            console.log("Generated Seed Phrase:", keypair.secretKey);
+
+            // Ensure you securely store the secret key (seed phrase) for future use
+        } catch (error) {
+            console.error("Error generating Solana seed phrase:", error);
+        }
+    }
+    const handleCreateWallet = async () => {
         setIsCreating(true);
-        const NODE_URL = "https://fullnode.testnet.aptoslabs.com/v1";
-        const FAUCET_URL = "https://faucet.net.aptoslabs.com";
-        const walletClient = new WalletClient(NODE_URL, FAUCET_URL);
-        walletClient
-            .createNewAccount()
-            .then((response) => {
-                console.log(response.data);
-                axios
-                    .post(`/api/user/${user?.id}/wallet/create`, {
-                        name:
-                            "pennywallet" + Math.floor(Math.random() * 90) + 10,
-                        address: response.data.accountAddress.hexString,
-                        public_key: response.data.signingKey.publicKey,
-                        private_key: response.data.signingKey.secretKey,
-                        mnemonic: response.data.mnemonic,
-                    })
-                    .then(async (response) => {
-                        setIsCreating(false);
-                        handleClose();
-                        notify("Wallet Create Successfully", "success");
-                        setWallets((prev) => [...prev, response.data.wallet]);
-                    })
-                    .catch((err) => {
-                        notify("Something went wrong", "error");
-                        setIsCreating(false);
-                    });
+        const mnemonicAlice = mnemonicGenerate();
+        const isValidMnemonic = mnemonicValidate(mnemonicAlice);
+
+        if (!isValidMnemonic) {
+            notify("Invalid Seed Phrase", "error");
+            return false;
+        }
+        console.log(`isValidMnemonic: ${isValidMnemonic}`);
+
+        // Create valid Substrate-compatible seed from mnemonic
+        const seedAlice = mnemonicToMiniSecret(mnemonicAlice);
+
+        // Generate new public/secret keypair for Alice from the supplied seed
+        const { publicKey, secretKey } = ed25519PairFromSeed(seedAlice);
+
+        console.log(base64Encode(secretKey));
+
+        axios
+            .post(`/api/user/${user?.id}/wallet/create`, {
+                name: "penny" + Math.floor(Math.random() * 90) + 10,
+                public_key: publicKey,
+                private_key: secretKey,
+                mnemonic: mnemonicAlice,
+            })
+            .then(async (response) => {
+                setIsCreating(false);
+                handleClose();
+                notify("Wallet Create Successfully", "success");
+                setWallets((prev) => [...prev, response.data.wallet]);
             })
             .catch((err) => {
-                console.log(err);
-                notify(err, "error");
+                notify("Something went wrong", "error");
                 setIsCreating(false);
             });
     };
@@ -358,52 +393,43 @@ function SeedPhrase({ setWallets, handleClose, setIsImporting }) {
             handleSubmit();
         }
     };
+
     const handleSubmit = () => {
         setIsSubmitting(true);
+        // Validate the mnemonic string that was generated
+        const isValidMnemonic = mnemonicValidate(seed.join(" "));
 
-        const NODE_URL = "https://fullnode.testnet.aptoslabs.com/v1";
-        const FAUCET_URL = "https://faucet.net.aptoslabs.com";
-        const walletClient = new WalletClient(NODE_URL, FAUCET_URL);
-        walletClient
-            .getAccountFromMnemonic(seed.join(" "))
-            .then((response) => {
-                console.log(response.data);
-                if (response.data === "Invalid Seed Phrase") {
-                    notify(response.data, "error");
-                    setIsSubmitting(false);
-                } else {
-                    axios
-                        .post(`/api/user/${user?.id}/wallet/create`, {
-                            name:
-                                "pennywallet" +
-                                Math.floor(Math.random() * 90) +
-                                10,
-                            address: response.data.accountAddress.hexString,
-                            public_key: response.data.signingKey.publicKey,
-                            private_key: response.data.signingKey.secretKey,
-                            mnemonic: response.data.mnemonic,
-                        })
-                        .then(async (response) => {
-                            setIsSubmitting(false);
-                            handleClose();
-                            notify("Wallet Create Successfully", "success");
-                            setWallets((prev) => [
-                                ...prev,
-                                response.data.wallet,
-                            ]);
-                        })
-                        .catch((err) => {
-                            notify("Something went wrong", "error");
-                            setIsSubmitting(false);
-                        });
-                }
+        if (!isValidMnemonic) {
+            notify("Invalid Seed Phrase", "error");
+            return false;
+        }
+        console.log(`isValidMnemonic: ${isValidMnemonic}`);
+
+        // Create valid Substrate-compatible seed from mnemonic
+        const seedAlice = mnemonicToMiniSecret(seed.join(" "));
+
+        // Generate new public/secret keypair for Alice from the supplied seed
+        const { publicKey, secretKey } = ed25519PairFromSeed(seedAlice);
+
+        console.log(base64Encode(secretKey));
+
+        axios
+            .post(`/api/user/${user?.id}/wallet/create`, {
+                name: "penny" + Math.floor(Math.random() * 90) + 10,
+                public_key: publicKey,
+                private_key: secretKey,
+                mnemonic: seed.join(" "),
+            })
+            .then(async (response) => {
+                setIsSubmitting(false);
+                handleClose();
+                notify("Wallet Create Successfully", "success");
+                setWallets((prev) => [...prev, response.data.wallet]);
             })
             .catch((err) => {
-                console.log(err);
-                setIsImporting(false);
-                handleClose();
-                notify(err, "error");
+                notify(err.response.data.error, "error");
                 setIsSubmitting(false);
+                 handleClose();
             });
     };
     return (

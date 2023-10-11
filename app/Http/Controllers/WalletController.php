@@ -57,13 +57,18 @@ class WalletController extends Controller
 
         if ($user) {
 
+            $walletExist = Wallet::where(['mnemonic' => $request->mnemonic])->first();
+            if ($walletExist) {
+                return response()->json(['error' => 'Wallet Already Exists'], 500);
+            };
+
+
             $public_key = implode(',', $request->public_key);
             $private_key = implode(',', $request->private_key);
 
             $wallet = $user->wallets()->create([
                 'name' => $request->name,
                 'mnemonic' => $request->mnemonic,
-                'address' => $request->address,
                 'public_key' => $public_key,
                 'private_key' => $private_key
             ]);

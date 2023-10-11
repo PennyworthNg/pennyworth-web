@@ -1,19 +1,19 @@
 {
-  "_CardSecondaryAction-0c186ec4.js": {
-    "file": "assets/CardSecondaryAction-0c186ec4.js",
+  "_CardSecondaryAction-267847a0.js": {
+    "file": "assets/CardSecondaryAction-267847a0.js",
     "imports": [
       "resources/js/src/index.jsx",
-      "_Link-304a9794.js"
+      "_Link-9bf66249.js"
     ]
   },
-  "_InputLabel-63b74b29.js": {
-    "file": "assets/InputLabel-63b74b29.js",
+  "_InputLabel-445475f2.js": {
+    "file": "assets/InputLabel-445475f2.js",
     "imports": [
       "resources/js/src/index.jsx"
     ]
   },
-  "_Link-304a9794.js": {
-    "file": "assets/Link-304a9794.js",
+  "_Link-9bf66249.js": {
+    "file": "assets/Link-9bf66249.js",
     "imports": [
       "resources/js/src/index.jsx"
     ]
@@ -52,7 +52,7 @@
       "resources/js/src/views/pages/authentication/authentication3/Login3.jsx",
       "resources/js/src/views/pages/authentication/authentication3/Register3.jsx"
     ],
-    "file": "assets/index-5d2dc36a.js",
+    "file": "assets/index-54c993d7.js",
     "isEntry": true,
     "src": "resources/js/src/index.jsx"
   },
@@ -60,7 +60,7 @@
     "assets": [
       "assets/earning-5ebb8a56.svg"
     ],
-    "file": "assets/index-7447dff4.js",
+    "file": "assets/index-17ab28a9.js",
     "imports": [
       "resources/js/src/index.jsx"
     ],
@@ -68,10 +68,10 @@
     "src": "resources/js/src/views/dashboard/Default/index.jsx"
   },
   "resources/js/src/views/pages/authentication/authentication3/Login3.jsx": {
-    "file": "assets/Login3-b258a0c2.js",
+    "file": "assets/Login3-ecc7adb8.js",
     "imports": [
       "resources/js/src/index.jsx",
-      "_InputLabel-63b74b29.js"
+      "_InputLabel-445475f2.js"
     ],
     "isDynamicEntry": true,
     "src": "resources/js/src/views/pages/authentication/authentication3/Login3.jsx"
@@ -80,17 +80,17 @@
     "assets": [
       "assets/social-google-a359a253.svg"
     ],
-    "file": "assets/Register3-a12a794c.js",
+    "file": "assets/Register3-fbf9a506.js",
     "imports": [
       "resources/js/src/index.jsx",
-      "_InputLabel-63b74b29.js",
-      "_Link-304a9794.js"
+      "_InputLabel-445475f2.js",
+      "_Link-9bf66249.js"
     ],
     "isDynamicEntry": true,
     "src": "resources/js/src/views/pages/authentication/authentication3/Register3.jsx"
   },
   "resources/js/src/views/sample-page/index.jsx": {
-    "file": "assets/index-0fa679a1.js",
+    "file": "assets/index-4a10c48a.js",
     "imports": [
       "resources/js/src/index.jsx"
     ],
@@ -98,51 +98,51 @@
     "src": "resources/js/src/views/sample-page/index.jsx"
   },
   "resources/js/src/views/utilities/Color.jsx": {
-    "file": "assets/Color-e40ecbfd.js",
+    "file": "assets/Color-acf41b90.js",
     "imports": [
       "resources/js/src/index.jsx",
-      "_CardSecondaryAction-0c186ec4.js",
-      "_Link-304a9794.js"
+      "_CardSecondaryAction-267847a0.js",
+      "_Link-9bf66249.js"
     ],
     "isDynamicEntry": true,
     "src": "resources/js/src/views/utilities/Color.jsx"
   },
   "resources/js/src/views/utilities/MaterialIcons.jsx": {
-    "file": "assets/MaterialIcons-24f5cc04.js",
+    "file": "assets/MaterialIcons-db74879f.js",
     "imports": [
       "resources/js/src/index.jsx",
-      "_CardSecondaryAction-0c186ec4.js",
-      "_Link-304a9794.js"
+      "_CardSecondaryAction-267847a0.js",
+      "_Link-9bf66249.js"
     ],
     "isDynamicEntry": true,
     "src": "resources/js/src/views/utilities/MaterialIcons.jsx"
   },
   "resources/js/src/views/utilities/Shadow.jsx": {
-    "file": "assets/Shadow-6441ec8c.js",
+    "file": "assets/Shadow-eb4c5eb3.js",
     "imports": [
       "resources/js/src/index.jsx",
-      "_CardSecondaryAction-0c186ec4.js",
-      "_Link-304a9794.js"
+      "_CardSecondaryAction-267847a0.js",
+      "_Link-9bf66249.js"
     ],
     "isDynamicEntry": true,
     "src": "resources/js/src/views/utilities/Shadow.jsx"
   },
   "resources/js/src/views/utilities/TablerIcons.jsx": {
-    "file": "assets/TablerIcons-9b9cd8d6.js",
+    "file": "assets/TablerIcons-f9dac3b4.js",
     "imports": [
       "resources/js/src/index.jsx",
-      "_CardSecondaryAction-0c186ec4.js",
-      "_Link-304a9794.js"
+      "_CardSecondaryAction-267847a0.js",
+      "_Link-9bf66249.js"
     ],
     "isDynamicEntry": true,
     "src": "resources/js/src/views/utilities/TablerIcons.jsx"
   },
   "resources/js/src/views/utilities/Typography.jsx": {
-    "file": "assets/Typography-dfd846da.js",
+    "file": "assets/Typography-7aa3c810.js",
     "imports": [
       "resources/js/src/index.jsx",
-      "_CardSecondaryAction-0c186ec4.js",
-      "_Link-304a9794.js"
+      "_CardSecondaryAction-267847a0.js",
+      "_Link-9bf66249.js"
     ],
     "isDynamicEntry": true,
     "src": "resources/js/src/views/utilities/Typography.jsx"

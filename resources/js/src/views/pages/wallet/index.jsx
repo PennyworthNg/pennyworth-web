@@ -130,7 +130,8 @@ export const Wallets = () => {
                                                         >
                                                             <Typography>
                                                                 {wallet?.address
-                                                                    .length > 20
+                                                                    ?.length >
+                                                                20
                                                                     ? wallet?.address?.slice(
                                                                           0,
                                                                           20

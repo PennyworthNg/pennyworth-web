@@ -66,6 +66,13 @@ export const Wallet = () => {
                         </Stack>
                         <Stack direction="row" height="40px" spacing={2}>
                             <Button
+                                variant="outlined"
+                                size="small"
+                                color="secondary"
+                            >
+                                Deposit
+                            </Button>
+                            <Button
                                 variant="contained"
                                 size="small"
                                 color="secondary"
@@ -77,26 +84,20 @@ export const Wallet = () => {
                                 size="small"
                                 color="secondary"
                             >
-                                Sell
-                            </Button>
-                            <Button
-                                variant="outlined"
-                                size="small"
-                                color="secondary"
-                            >
-                                Swap
+                                Send
                             </Button>
                         </Stack>
                     </Stack>
                     <Stack direction="row" justifyContent="space-between">
-                        <Typography variant="h4">
-                            {!mdUp && wallet?.address.length > 20
-                                ? wallet?.address?.slice(0, 20) + "..."
-                                : wallet?.address}
+                        <Typography
+                            variant="h3"
+                            align="left"
+                            color="secondary"
+                            mb={4}
+                        >
+                            Wallet Balance : $0.00
                         </Typography>
-                        <Typography variant="h5" color="initial">
-                            #0.00
-                        </Typography>
+                        <Button variant="text" color="secondary">Manage Wallet</Button>
                     </Stack>
                     <MainCard>
                         <Grid container>

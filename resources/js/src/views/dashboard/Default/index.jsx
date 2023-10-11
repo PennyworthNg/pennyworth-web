@@ -14,6 +14,7 @@ import { gridSpacing } from "../../../store/constant";
 import { NoWalletCard } from "./NoWalletCard";
 import { useSelector } from "react-redux";
 import { WalletCard } from "../../pages/wallet/WalletCard";
+import { useNavigate } from "react-router";
 
 // ==============================|| DEFAULT DASHBOARD ||============================== //
 
@@ -21,6 +22,7 @@ const Dashboard = () => {
     const [isLoading, setLoading] = useState(true);
     const [wallets, setWallets] = useState([]);
     const user = useSelector((state) => state.user);
+    const navigate = useNavigate();
 
     useEffect(() => {
         axios
@@ -35,7 +37,12 @@ const Dashboard = () => {
                 <Grid item xs={12}>
                     <Stack direction="row" justifyContent="space-between">
                         <Typography variant="h4">Wallets</Typography>
-                        <Button variant="text">View All</Button>
+                        <Button
+                            variant="text"
+                            onClick={() => navigate("wallets")}
+                        >
+                            View All
+                        </Button>
                     </Stack>
                     <Grid container spacing={gridSpacing}>
                         {/* Wallets */}
@@ -46,8 +53,8 @@ const Dashboard = () => {
                                     <Grid
                                         key={wallet.id}
                                         item
-                                        lg={3}
-                                        md={3}
+                                        lg={4}
+                                        md={4}
                                         sm={6}
                                         xs={12}
                                     >
