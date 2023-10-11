@@ -67,8 +67,19 @@ export default function AuthVerify({ ...others }) {
 
     const handlePaste = (event, index) => {
         event.preventDefault();
-        const clipboard = event.clipboardData || window.clipboardData;
-        const pasteData = 
+        const clipboardData = event.clipboardData || window.clipboardData;
+        const pastedNumber = clipboardData.getData("text");
+
+        const digitArray = pastedNumber.toString().split("").map(Number);
+
+        const updatedPin = [...pin];
+        digitArray.forEach((digit, i) => {
+            if (i < updatedPin.length) {
+                updatedPin[i] = digit;
+            }
+        });
+
+        setPin(updatedPin);
     };
 
     const handleBackspace = (event, index) => {
@@ -189,6 +200,7 @@ export default function AuthVerify({ ...others }) {
                                     maxLength: 1,
                                 }}
                                 onKeyDown={(e) => handleBackspace(e, index)}
+                                onPaste={handlePaste}
                             />
                         </FormControl>
                     ))}

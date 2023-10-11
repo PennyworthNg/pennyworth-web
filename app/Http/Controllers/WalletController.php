@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+use App\Models\Wallet;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
@@ -17,6 +18,33 @@ class WalletController extends Controller
                 return response()->json(['wallets' => $user->wallets], 200);
             } else {
                 return response()->json(['error' => 'User not found'], 404);
+            }
+        } catch (Exception $e) {
+            return response()->json(['error' => $e->getMessage()], 500);
+        }
+    }
+
+    public function UserWallet($user, $wallet)
+    {
+
+        try {
+
+
+            $userWallet = Wallet::where(['id' => $wallet, 'userId' => $user])->first();
+            if ($userWallet) {
+
+
+
+
+
+
+
+
+
+
+                return response()->json(['wallet' => $userWallet], 200);
+            } else {
+                return response()->json(['error' => 'Wallet not found'], 404);
             }
         } catch (Exception $e) {
             return response()->json(['error' => $e->getMessage()], 500);

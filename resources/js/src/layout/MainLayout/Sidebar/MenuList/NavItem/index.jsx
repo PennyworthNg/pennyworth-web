@@ -7,6 +7,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { useTheme } from "@mui/material/styles";
 import {
     Avatar,
+    Badge,
+    Box,
     Chip,
     ListItemButton,
     ListItemIcon,
@@ -103,18 +105,35 @@ const NavItem = ({ item, level }) => {
             </ListItemIcon>
             <ListItemText
                 primary={
-                    <Typography
-                        variant={
-                            customization.isOpen.findIndex(
-                                (id) => id === item.id
-                            ) > -1
-                                ? "h5"
-                                : "h4"
-                        }
-                        color="inherit"
-                    >
-                        {item.title}
-                    </Typography>
+                    <>
+                        <Box
+                            sx={{
+                                display: "flex",
+                            }}
+                        >
+                            <Typography
+                                variant={
+                                    customization.isOpen.findIndex(
+                                        (id) => id === item.id
+                                    ) > -1
+                                        ? "h5"
+                                        : "h4"
+                                }
+                                color="inherit"
+                            >
+                                {item.title}
+                                {item?.coming ? (
+                                    <Typography
+                                        ml={1}
+                                        variant="caption"
+                                        color="secondary"
+                                    >
+                                        coming soon
+                                    </Typography>
+                                ) : null}
+                            </Typography>
+                        </Box>
+                    </>
                 }
                 secondary={
                     item.caption && (

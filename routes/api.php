@@ -23,6 +23,7 @@ Route::post('/auth/resend', [AuthController::class, 'resend']);
 
 Route::prefix('user')->group(function () {
     Route::get('/{id}/wallets', [WalletController::class, 'UserWallets']);
+    Route::get('/{user}/wallets/{wallet}', [WalletController::class, 'UserWallet']);
     Route::post('/{id}/wallet/create', [WalletController::class, 'create']);
     Route::post('/{id}/wallet/{wallet}/gen-pub-key', [WalletController::class, 'generatePubKey']);
     Route::get('/{id}/wallet/show/{wallet}', [WalletController::class, 'UserWallets']);

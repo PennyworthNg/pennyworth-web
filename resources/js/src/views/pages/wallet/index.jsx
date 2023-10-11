@@ -14,15 +14,17 @@ import {
     Stack,
     Tooltip,
     Typography,
+    useMediaQuery,
 } from "@mui/material";
 
 // project imports
 import MainCard from "../../../ui-component/cards/MainCard";
-import { WalletOutlined } from "@mui/icons-material";
+import { Visibility, WalletOutlined } from "@mui/icons-material";
 import axios from "../../../api/axios";
 import { useSelector } from "react-redux";
 import { useEffect, useState } from "react";
 import WalletModal from "../../dashboard/Default/WalletModal";
+import { useNavigate } from "react-router";
 
 // ==============================|| SAMPLE PAGE ||============================== //
 
@@ -37,6 +39,10 @@ export const Wallets = () => {
             .then((response) => setWallets(response.data.wallets));
         setLoading(false);
     }, [user]);
+
+    const navigate = useNavigate();
+    const smUp = useMediaQuery("(min-width:768px)");
+    const xsDown = useMediaQuery("(max-width:400px)");
     return (
         <>
             {loading ? (
@@ -52,6 +58,7 @@ export const Wallets = () => {
                         {wallets?.length < 4 ? (
                             <Button
                                 variant="contained"
+                                color="secondary"
                                 onClick={() => setOpenModal(true)}
                             >
                                 Add Wallet
@@ -59,12 +66,37 @@ export const Wallets = () => {
                         ) : null}
                     </Stack>
                     <MainCard>
-                        {wallets?.length > 0 
-                        ? (
+                        {wallets?.length > 0 ? (
                             <List>
                                 {wallets.map((wallet, index) => (
                                     <>
-                                        <ListItem disablePadding key={index}>
+                                        <ListItem
+                                            onClick={() =>
+                                                navigate(`${wallet.id}`)
+                                            }
+                                            disablePadding
+                                            key={index}
+                                            secondaryAction={
+                                                !xsDown && (
+                                                    <Button
+                                                        startIcon={
+                                                            <Visibility />
+                                                        }
+                                                        onClick={() =>
+                                                            navigate(
+                                                                `${wallet.id}`
+                                                            )
+                                                        }
+                                                        variant="contained"
+                                                        color="secondary"
+                                                    >
+                                                        {smUp
+                                                            ? "View Wallet"
+                                                            : null}
+                                                    </Button>
+                                                )
+                                            }
+                                        >
                                             <ListItemButton>
                                                 <ListItemIcon>
                                                     <WalletOutlined
@@ -73,6 +105,7 @@ export const Wallets = () => {
                                                         }}
                                                     />
                                                 </ListItemIcon>
+
                                                 <ListItemText
                                                     primary={
                                                         <Tooltip

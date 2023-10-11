@@ -4,6 +4,7 @@ import { lazy } from "react";
 import MainLayout from "../layout/MainLayout";
 import Loadable from "../ui-component/Loadable";
 import { Wallets } from "../views/pages/wallet";
+import { Wallet } from "../views/pages/wallet/Wallet";
 
 // dashboard routing
 const DashboardDefault = Loadable(
@@ -39,6 +40,10 @@ const MainRoutes = {
         {
             path: "/dashboard/wallets",
             element: <Wallets />,
+        },
+        {
+            path: "/dashboard/wallets/:id",
+            element: <Wallet />,
         },
 
         {
